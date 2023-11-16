@@ -2,6 +2,9 @@ import Render from "./Render.js";
 import socket from "../socket.js";
 import Input from "./Input.js";
 import LocalMath from "./LocalMath.js";
+import Player from "./Player.js";
+import ArrowSprite from "./sprite/ArrowSprite.js";
+import PlayerSprite from "./sprite/PlayerSprite.js";
 export default class Game{
     constructor() {
         this.render = new Render()
@@ -9,19 +12,7 @@ export default class Game{
         this.loop = undefined
         this.socket_id = undefined
         this.role = undefined
-        this.arrows = []
-        this.player = {
-            fov: 60,
-            halfFov: 30,
-            x: 2,
-            y: 2,
-            angle: 0,
-            radius: 20,
-            speed: {
-                movement: 0.04,
-                rotation: 0.7
-            }
-        }
+        this.player = new Player()
         this.backend_palyers = undefined
         this.inputs = new Input()
         this.map = [
@@ -48,7 +39,7 @@ export default class Game{
             this.socket_id = socket.id
         })
         socket.on("delete_player", (socket_id) => {
-            this.sprites = this.sprites.filter(elem => elem.socket_id !== socket_id)
+            this.sprites = this.sprites.filter(elem => elem.id !== socket_id)
         })
         socket.on('get_role', (role) => {
             this.role = role
@@ -62,6 +53,9 @@ export default class Game{
                     }
                 })
             }
+        })
+        socket.on('delete_arrow', (id) => {
+            this.sprites = this.sprites.filter(elem => elem.id !== id)
         })
         socket.on('modal', (data) => {
             let tick = 0
@@ -83,7 +77,18 @@ export default class Game{
             },200)
         })
         socket.on('updateArrows', (data) => {
-            this.arrows = data
+            data.forEach(elem => {
+                let exist = this.sprites.find(s_elem => s_elem.id === elem.id )
+                if(exist){
+                    exist.x += (elem.x - exist.x) * 0.5
+                    exist.y += (elem.y - exist.y) * 0.5
+                    exist.angle = elem.angle
+                }
+                else {
+                    let new_arrow_sprite = new ArrowSprite(elem.x, elem.y, elem.angle, elem.id, 'arrow')
+                    this.sprites.push(new_arrow_sprite)
+                }
+            })
         })
         socket.on("updatePlayers", (server_data) => {
             this.backend_palyers = server_data
@@ -96,9 +101,10 @@ export default class Game{
                     this.player.y += (back_end_player.y - this.player.y) * 0.5
                     this.player.hp = back_end_player.hp
                     this.player.state = back_end_player.state
+                    this.player.attack = back_end_player.attack
                 }
                 else {
-                    let exist = this.sprites.find(elem => elem.socket_id === server_data[item].socket_id )
+                    let exist = this.sprites.find(elem => elem.id === server_data[item].socket_id )
                     if(exist){
                         exist.x += (back_end_player.x - exist.x) * 0.5
                         exist.y += (back_end_player.y - exist.y) * 0.5
@@ -106,20 +112,19 @@ export default class Game{
                         exist.hp = back_end_player.hp
                         exist.previos_state = exist.state
                         exist.state = back_end_player.state
+                        exist.attack = back_end_player.attack
                     }
                     else {
-                        this.sprites.push({
-                            x: server_data[item].x,
-                            y: server_data[item].y,
-                            angle: server_data[item].angle,
-                            socket_id: server_data[item].socket_id,
-                            nick: server_data[item].nick,
-                            hp: server_data[item].hp,
-                            id: server_data[item].skin,
-                            state: server_data[item].state,
-                            frame: 0,
-                            frame_timer: 0,
-                        })
+                        let new_player_sprite = new PlayerSprite(server_data[item].x,
+                            server_data[item].y,
+                            server_data[item].angle,
+                            server_data[item].socket_id,
+                            server_data[item].nick,
+                            server_data[item].hp,
+                            server_data[item].texture_id,
+                            server_data[item].state
+                            )
+                        this.sprites.push(new_player_sprite)
                     }
                 }
             }
@@ -127,31 +132,38 @@ export default class Game{
     }
     startLoop(){
         this.loop = setInterval(() => {
+            this.player.stateFrame(this)
             this.inactiveSprites();
-            this.render.drawFrame(this.player, this.sprites, this.arrows)
+            this.render.drawFrame(this.player, this.sprites)
         }, this.render.delay);
         this.sendInputsToServer = setInterval(() => {
-            let keys = this.inputs.get()
-            if(!this.player.attack && keys.mouse_1.pressed){
-                this.player.attack = true
-                setTimeout(()=>{
-                    for(let i = 0; i < this.sprites.length; i++) {
-                        let sprite =  this.sprites[i]
-                        if(sprite.socket_id === this.socket_id) continue
-                        if(!sprite.in_attack) continue
-                        let distance = Math.sqrt(Math.pow(sprite.x - this.player.x, 2) + Math.pow(sprite.y - this.player.y, 2))
-                        if(distance > 0.8) continue
-                        socket.emit('hit_player', sprite.socket_id)
-                    }
-                    this.player.attack = false
-                }, 1500)
-            }
-
             let d = {
                 dx: 0,
                 dy: 0,
-                da: 0
+                da: 0,
             }
+
+            let keys = this.inputs.get()
+            if(this.role === 'player'){
+                if(!this.player.attack && keys.mouse_1.pressed && !this.player.in_block){
+                    socket.emit('start_attack')
+                }
+                if(keys.q.pressed && !this.player.attack){
+                    this.player.in_block = true
+                }
+                else {
+                    this.player.in_block = false
+                }
+
+                if(keys.e.pressed && !this.player.arrow_cd){
+                    this.player.arrow_cd = true
+                    socket.emit('arrow_shot')
+                    setTimeout(()=> {
+                        this.player.arrow_cd = false
+                    },2000)
+                }
+            }
+
             if (keys.w.pressed) {
                 let dx = Math.cos(LocalMath.degreeToRadians(this.player.angle)) * this.player.speed.movement
                 let dy = Math.sin(LocalMath.degreeToRadians(this.player.angle)) * this.player.speed.movement

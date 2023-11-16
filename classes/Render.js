@@ -1,6 +1,69 @@
 import Color from "./Color.js";
 import LocalMath from "./LocalMath.js";
 export default class Render{
+
+    static sprites_texture_data = {
+        'arrow': {
+            state_sprite_data: [
+                {
+                    src: './sprites/arrow/arrow.png',
+                    width: 40,
+                    height: 40,
+                    simple: true
+                },
+            ],
+        },
+        'skeleton': {
+            state_sprite_data: [
+                {
+                    src: './sprites/skeleton/skeleton_idle.png',
+                    width: 220,
+                    height: 300,
+                },
+                {
+                    src: './sprites/skeleton/skeleton_walk.png',
+                    width: 220,
+                    height: 300,
+                },
+                {
+                    src: './sprites/skeleton/skeleton_attack.png',
+                    width: 220,
+                    height: 300,
+                }
+            ],
+        },
+        'titan':{
+            state_sprite_data: [
+                {
+                    src: './sprites/titan/titan_idle.png',
+                    width: 205,
+                    height: 375,
+                },
+                {
+                    src: './sprites/titan/titan_walk.png',
+                    width: 205,
+                    height: 375,
+                },
+                {
+                    src: './sprites/titan/titan_attack.png',
+                    width: 270,
+                    height: 375,
+                }
+            ],
+        },
+        // {
+        //     id: 'bat',
+        //     width: 150,
+        //     height: 226,
+        //     data: null,
+        //     src: 'bat.png'
+        // }
+    }
+
+    static getSpriteById(texture_id){
+        return Render.sprites_texture_data[texture_id]
+    }
+
     constructor() {
         this.data = {
             screen: {
@@ -49,80 +112,29 @@ export default class Render{
                     data: null
                 }
             ],
-            sprites_texture_data: [
-                {
-                    id: 'skeleton',
-                    state_sprite_data: [
-                        {
-                            src: './sprites/skeleton/skeleton_idle.png',
-                            width: 220,
-                            height: 300,
-                        },
-                        {
-                            src: './sprites/skeleton/skeleton_walk.png',
-                            width: 220,
-                            height: 300,
-                        }
-                    ],
-                },
-                {
-                    id: 'titan',
-                    state_sprite_data: [
-                        {
-                            src: './sprites/titan/titan_idle.png',
-                            width: 205,
-                            height: 375,
-                        },
-                        {
-                            src: './sprites/titan/titan_walk.png',
-                            width: 205,
-                            height: 375,
-                        }
-                    ],
-                },
-                // {
-                //     id: 'bat',
-                //     width: 150,
-                //     height: 226,
-                //     data: null,
-                //     src: 'bat.png'
-                // }
-            ],
         }
 
         this.sprites = []
         this.buffer = []
         this.delay = 15
     }
-    drawFrame(player, sprites, arrows){
+    drawFrame(player, sprites){
         this.clearScreen();
         this.rayCasting(player, sprites);
         this.renderBuffer();
         this.drawSprites(player, sprites);
-        arrows.forEach(elem => {
-
-            let spriteXRelative = elem.x - player.x;
-            let spriteYRelative = elem.y - player.y;
-
-            // Get angle of the sprite in relation of the player angle
-            let spriteAngleRadians = Math.atan2(spriteYRelative, spriteXRelative);
-            let spriteAngle = LocalMath.radiansToDegrees(spriteAngleRadians) - Math.floor(player.angle - player.halfFov);
-
-            let spriteX = Math.floor(spriteAngle * this.data.projection.width / player.fov);
-
-            let distance = Math.sqrt(Math.pow(player.x - elem.x, 2) + Math.pow(player.y - elem.y, 2));
-
-            let Width = Math.floor(40 / distance);
-            let Height = Math.floor(40 / distance);
-
-            this.screenContext.beginPath();
-            this.screenContext.arc(spriteX, this.data.projection.halfHeight, Width, 0, 2 * Math.PI);
-            this.screenContext.stroke();
-            this.screenContext.fill();
-
-        })
+        this.drawHud(player)
+    }
+    drawHud(player){
+        let y_offset = 0
+        if(player.in_block){
+            y_offset = 400
+        }
+        else if(player.attack){
+            y_offset = 200
+        }
         this.screenContext.drawImage(this.hud,
-            0,0,
+            300 * player.state_frame,y_offset,
             300,200
             ,0,0,
             this.data.projection.width,
@@ -137,7 +149,7 @@ export default class Render{
     }
     initHud(){
         this.hud = new Image()
-        this.hud.src = 'hud.png'
+        this.hud.src = 'hud2.png'
     }
     initCanvas(player){
         this.data.screen.halfWidth = this.data.screen.width / 2;
@@ -184,12 +196,10 @@ export default class Render{
     }
 
     loadSprites(){
-        for(let i = 0; i < this.data.sprites_texture_data.length; i++) {
-            if(this.data.sprites_texture_data[i].id) {
-                for(let j = 0 ; j < this.data.sprites_texture_data[i].state_sprite_data.length; j ++){
-                    this.data.sprites_texture_data[i].state_sprite_data[j].img = new Image()
-                    this.data.sprites_texture_data[i].state_sprite_data[j].img.src = this.data.sprites_texture_data[i].state_sprite_data[j].src
-                }
+        for(let item of Object.values(Render.sprites_texture_data)) {
+            for(let j = 0 ; j < item.state_sprite_data.length; j++){
+                item.state_sprite_data[j].img = new Image()
+                item.state_sprite_data[j].img.src = item.state_sprite_data[j].src
             }
         }
     }
@@ -339,27 +349,7 @@ export default class Render{
     drawSprites(player, sprites) {
         for(let i = 0; i < sprites.length; i++) {
             if(sprites[i].active) {
-
-                let sprite = this.data.sprites_texture_data.find(elem => elem.id === sprites[i].id).state_sprite_data[sprites[i].state - 1];
-                let spriteXRelative = sprites[i].x - player.x;
-                let spriteYRelative = sprites[i].y - player.y;
-
-                let spriteAngleRadians = Math.atan2(spriteYRelative, spriteXRelative);
-                let spriteAngle = LocalMath.radiansToDegrees(spriteAngleRadians) - Math.floor(player.angle - player.halfFov);
-
-                if(spriteAngle > 360) spriteAngle -= 360;
-                if(spriteAngle < 0) spriteAngle += 360;
-
-                let spriteX = Math.floor(spriteAngle * this.data.projection.width / player.fov);
-
-                let distance = Math.sqrt(Math.pow(player.x - sprites[i].x, 2) + Math.pow(player.y - sprites[i].y, 2));
-
-                let spriteWidth = Math.floor(sprite.width / distance);
-                let spriteHeight = Math.floor(this.data.projection.height / distance);
-
-                sprites[i].in_attack = this.data.projection.middle > spriteX - spriteWidth / 2 && this.data.projection.middle < spriteX + spriteWidth / 2
-
-                this.drawSprite(spriteX, spriteWidth, spriteHeight, sprite, sprites[i], LocalMath.radiansToDegrees(spriteAngleRadians), distance);
+                sprites[i].draw(player, this.screenContext, this.buffer, this.data.projection)
             }
         }
     }
@@ -439,11 +429,14 @@ export default class Render{
             else if((angle_dif > 337.5 && angle_dif < 360) || (angle_dif > 0 && angle_dif < 22.5)){
                 offset = 4
             }
+
+        }
+        if(!item.simple){
             this.screenContext.fillText(item.nick + '(' + item.hp + ')', xProjection - 10, this.data.projection.halfHeight - spriteHeight / 2)
+            this.screenContext.font = "12px serif";
+            this.screenContext.fillStyle = 'white'
         }
 
-       this.screenContext.font = "12px serif";
-       this.screenContext.fillStyle = 'white'
        this.screenContext.drawImage(sprite.img,
             sprite.width  * offset + s_w_offset,
             sprite.height * item.frame,

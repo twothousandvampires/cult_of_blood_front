@@ -1,8 +1,109 @@
 import Color from "./Color.js";
 import LocalMath from "./LocalMath.js";
+
 export default class Render{
 
     static sprites_texture_data = {
+        'speed_pu': {
+            state_sprite_data: [
+                {
+                    src: './sprites/game/Spell_Haste.gif',
+                    width: 68,
+                    height: 52,
+                    simple: true
+                },
+            ],
+        },
+        'energy_pu': {
+            state_sprite_data: [
+                {
+                    src: './sprites/game/Spell_Mind_Blast.gif',
+                    width: 77,
+                    height: 52,
+                    simple: true
+                },
+            ],
+        },
+        'power_pu': {
+            state_sprite_data: [
+                {
+                    src: './sprites/game/Spell_Power.gif',
+                    width: 68,
+                    height: 52,
+                    simple: true
+                },
+            ],
+        },
+        'life_pu': {
+            state_sprite_data: [
+                {
+                    src: './sprites/game/Spell_First_Aid.gif',
+                    width: 68,
+                    height: 52,
+                    simple: true
+                },
+            ],
+        },
+        'arrow_pu': {
+            state_sprite_data: [
+                {
+                    src: './sprites/game/Spell_Flame_Arrow.gif',
+                    width: 86,
+                    height: 52,
+                    simple: true
+                },
+            ],
+        },
+        'ball_lightning_pu': {
+            state_sprite_data: [
+                {
+                    src: './sprites/game/Spell_Static_Charge.gif',
+                    width: 68,
+                    height: 54,
+                    simple: true
+                },
+            ],
+        },
+        'rail_lightning_pu': {
+            state_sprite_data: [
+                {
+                    src: './sprites/game/Spell_Lightning_Bolt.gif',
+                    width: 92,
+                    height: 52,
+                    simple: true
+                },
+            ],
+        },
+        'dark_skull_pu': {
+            state_sprite_data: [
+                {
+                    src: './sprites/game/Spell_Toxic_Cloud.gif',
+                    width: 97,
+                    height: 52,
+                    simple: true
+                },
+            ],
+        },
+        'ice_shard_pu': {
+            state_sprite_data: [
+                {
+                    src: './sprites/game/Spell_Cold_Beam.gif',
+                    width: 99,
+                    height: 53,
+                    simple: true
+                },
+            ],
+        },
+        'fireball_pu': {
+            state_sprite_data: [
+                {
+                    src: './sprites/game/Spell_Fireball.gif',
+                    width: 68,
+                    height: 52,
+                    simple: true
+                },
+            ],
+        },
         'arrow': {
             state_sprite_data: [
                 {
@@ -29,15 +130,22 @@ export default class Render{
                     src: './sprites/skeleton/skeleton_attack.png',
                     width: 220,
                     height: 300,
+                },
+                {
+                    src: './sprites/skeleton/skeleton_dead.png',
+                    width: 220,
+                    height: 300,
                 }
             ],
         },
-        'titan':{
+        'titan': {
             state_sprite_data: [
                 {
                     src: './sprites/titan/titan_idle.png',
                     width: 205,
                     height: 375,
+                    game_width: 150,
+                    game_height: 220,
                 },
                 {
                     src: './sprites/titan/titan_walk.png',
@@ -46,8 +154,97 @@ export default class Render{
                 },
                 {
                     src: './sprites/titan/titan_attack.png',
-                    width: 270,
+                    width: 205,
                     height: 375,
+                },
+                {
+                    src: './sprites/titan/titan_dead.png',
+                    width: 205,
+                    height: 375,
+                }
+            ],
+        },
+        'ball_lightning':{
+            state_sprite_data: [
+                {
+                    src: './sprites/spells/ball_lightning.png',
+                    width: 110,
+                    height: 110,
+                    simple: true
+                },
+            ],
+        },
+        'rail_lightning':{
+            state_sprite_data: [
+                {
+                    src: './sprites/effect/rail_lightning.png',
+                    width: 60,
+                    height: 62,
+                    simple: true
+                },
+            ],
+        },
+        'dark_skull':{
+            state_sprite_data: [
+                {
+                    src: './sprites/spells/dark_skull.png',
+                    width: 41,
+                    height: 43,
+                    simple: true
+                },
+            ],
+        },
+        'big_dark_skull':{
+            state_sprite_data: [
+                {
+                    src: './sprites/spells/big_dark_skull.png',
+                    width: 70,
+                    height: 80,
+                    simple: true
+                },
+            ],
+        },
+        'ice_shard':{
+            state_sprite_data: [
+                {
+                    src: './sprites/spells/ice_shard.png',
+                    width: 100,
+                    height: 95,
+                    simple: true
+                },
+            ],
+        },
+        'fireball':{
+            state_sprite_data: [
+                {
+                    src: './sprites/spells/fireball.png',
+                    width: 157,
+                    height: 144,
+                    simple: true
+                },
+            ],
+        },
+        'druid':{
+            state_sprite_data: [
+                {
+                    src: './sprites/druid/druid_idle.png',
+                    width: 186,
+                    height: 294,
+                },
+                {
+                    src: './sprites/druid/druid_walk.png',
+                    width: 186,
+                    height: 292,
+                },
+                {
+                    src: './sprites/druid/druid_attack.png',
+                    width: 186,
+                    height: 294,
+                },
+                {
+                    src: './sprites/druid/druid_dead.png',
+                    width: 186,
+                    height: 294,
                 }
             ],
         },
@@ -65,6 +262,7 @@ export default class Render{
     }
 
     constructor() {
+        this.max_distance_to_draw = 7.5
         this.data = {
             screen: {
                 width: 1200,
@@ -90,11 +288,17 @@ export default class Render{
             },
             textures: [
                 {
-                    width: 16,
-                    height: 16,
+                    width: 32,
+                    height: 32,
+                    id: "graveyard-fence",
+                    data: null
+                },
+                {
+                    width: 32,
+                    height: 32,
                     id: "texture",
                     data: null
-                }
+                },
             ],
             floorTextures: [
                 {
@@ -118,23 +322,60 @@ export default class Render{
         this.buffer = []
         this.delay = 15
     }
-    drawFrame(player, sprites){
+    updateLeaderBoard(data){
+        let board = document.getElementById('leaderboard_content')
+        board.innerHTML = ''
+
+        Object.values(data).forEach(elem => {
+            let row = document.createElement('p')
+
+            row.innerText = elem.nick + '   -    ' + elem.kills
+
+            board.appendChild(row)
+        })
+    }
+    updateLog(msg){
+        let log = document.getElementById('log')
+
+        let p = document.createElement('p')
+        p.innerText = msg
+
+        log.appendChild(p)
+    }
+    updateSpell(spell){
+        let wrap = document.getElementById('spell')
+        wrap.innerHTML = ''
+        if(spell){
+            let img = document.createElement('img')
+            img.src = spell.client_img_path
+
+            wrap.appendChild(img)
+        }
+    }
+    drawFrame(game) {
+        if(!this.data.map) return
         this.clearScreen();
-        this.rayCasting(player, sprites);
+        this.rayCasting(game.player, game.sprites);
         this.renderBuffer();
-        this.drawSprites(player, sprites);
-        this.drawHud(player)
+        this.drawSprites(game);
+        this.drawHud(game.player)
+        this.updateHud(game.player)
+    }
+    updateHud(player){
+        if(!player.angle) return
+        this.hud_stat_hp.innerText = player.hp
+        this.hud_stat_armour.innerText = player.energy
+        this.hud_stat_ammo.innerText = player.ammo
+        this.hud_stat_speed.innerText = player.movement_speed.toFixed(2)
+        this.hud_stat_power.innerText = player.power
     }
     drawHud(player){
-        let y_offset = 0
-        if(player.in_block){
-            y_offset = 400
-        }
-        else if(player.attack){
-            y_offset = 200
-        }
-        this.screenContext.drawImage(this.hud,
-            300 * player.state_frame,y_offset,
+        if(!player.game_mode) return
+
+        let sprite = player.game_mode.hud
+        this.screenContext.drawImage(sprite.img,
+            300 * sprite.frame,
+            sprite.y_offset,
             300,200
             ,0,0,
             this.data.projection.width,
@@ -149,7 +390,13 @@ export default class Render{
     }
     initHud(){
         this.hud = new Image()
-        this.hud.src = 'hud2.png'
+        this.hud.src = 'left.png'
+
+        this.hud_stat_hp = document.getElementById('player_hud_hp')
+        this.hud_stat_armour = document.getElementById('player_hud_armour')
+        this.hud_stat_ammo = document.getElementById('player_hud_ammo')
+        this.hud_stat_speed = document.getElementById('player_hud_speed')
+        this.hud_stat_power = document.getElementById('player_hud_power')
     }
     initCanvas(player){
         this.data.screen.halfWidth = this.data.screen.width / 2;
@@ -160,12 +407,16 @@ export default class Render{
         this.data.projection.halfWidth = this.data.projection.width / 2;
         this.data.projection.halfHeight = this.data.projection.height / 2;
         this.data.rayCasting.incrementAngle = player.fov / this.data.projection.width;
-
         const screen = document.createElement('canvas');
         screen.width = this.data.screen.width;
         screen.height = this.data.screen.height;
         screen.style.border = "1px solid black";
-        document.body.appendChild(screen);
+        document.getElementById('canvas_wrap').appendChild(screen);
+        document.getElementById('player_hud').style.width = screen.width + 'px'
+
+        screen.addEventListener("click", async () => {
+            await document.body.requestPointerLock();
+        });
 
         this.screenContext = screen.getContext("2d");
         this.screenContext.scale(this.data.screen.scale, this.data.screen.scale);
@@ -173,6 +424,9 @@ export default class Render{
 
         this.data.projection.imageData = this.screenContext.createImageData(this.data.projection.width, this.data.projection.height);
         this.data.projection.buffer = this.data.projection.imageData.data;
+
+        this.canvas_x_offet = screen.offsetLeft
+        this.canvas_y_offet = screen.offsetTop
     }
     loadTextures(){
         for(let i = 0; i < this.data.textures.length; i++) {
@@ -224,18 +478,30 @@ export default class Render{
         return colorArray;
     }
 
-    drawPixel(x, y, color, distance) {
-        if(!color.a) return;
-        let shadow = 0;
-        if (distance){
-            shadow = 15 * distance
+    drawPixel(x, y, color, distance, player) {
+        if(!color.a){
+            return
         }
-        let r = color.r - shadow
-        if(r < 0) r = 0
-        let g = color.g - shadow
-        if(g < 0) g = 0
-        let b = color.b - shadow
-        if(b < 0) b = 0
+        let b = color.b
+        let r = color.r
+        let g = color.g
+
+        if(distance && distance >= player.max_distance){
+            b = 0
+            r = 0
+            g = 0
+        }
+
+        else if(distance && distance >= player.min_distance){
+            let relate_min_distance = distance - player.min_distance
+            let dif = player.max_distance - player.min_distance
+            let p = relate_min_distance/dif
+
+            b = Math.floor(b - (b * p))
+            r = Math.floor(r - (r * p))
+            g = Math.floor(g - (g * p))
+        }
+
         let offset = 4 * (Math.floor(x) + Math.floor(y) * this.data.projection.width);
         this.data.projection.buffer[offset  ] = r;
         this.data.projection.buffer[offset+1] = g;
@@ -243,9 +509,9 @@ export default class Render{
         this.data.projection.buffer[offset+3] = color.a;
     }
 
-   drawLine(x1, y1, y2, color, distance) {
+   drawLine(x1, y1, y2, color, distance, player) {
         for(let y = y1; y < y2; y++) {
-            this.drawPixel(x1, y, color, distance);
+            this.drawPixel(x1, y, color, distance, player);
         }
     }
 
@@ -265,7 +531,7 @@ export default class Render{
             // todo player
             tilex += player.x
             tiley += player.y
-            let tile = this.data.map[Math.floor(tiley)][Math.floor(tilex)]
+            let tile = this.data.map.layout[Math.floor(tiley)][Math.floor(tilex)]
 
             // Get texture
             let texture = this.data.floorTextures[tile]
@@ -280,7 +546,7 @@ export default class Render{
 
             // Get pixel color
             let color = texture.data[texture_x + texture_y * texture.width];
-            this.drawPixel(x1, y, color, distance)
+            this.drawPixel(x1, y, color, distance, player)
         }
     }
     renderBuffer() {
@@ -292,29 +558,28 @@ export default class Render{
     }
    rayCasting(player, sprites) {
         this.buffer = []
-        let rayAngle = player.angle - player.halfFov;
+        let ray_angle = player.angle - player.halfFov;
         for(let rayCount = 0; rayCount < this.data.projection.width; rayCount++) {
 
-            // Ray data
             let ray = {
                 x: player.x,
                 y: player.y
             }
 
-            let rayCos = Math.cos(LocalMath.degreeToRadians(rayAngle)) / this.data.rayCasting.precision;
-            let raySin = Math.sin(LocalMath.degreeToRadians(rayAngle)) / this.data.rayCasting.precision;
+            let ray_cos = Math.cos(LocalMath.degreeToRadians(ray_angle)) / this.data.rayCasting.precision;
+            let ray_sin = Math.sin(LocalMath.degreeToRadians(ray_angle)) / this.data.rayCasting.precision;
 
             let wall = 0;
-            while(wall == 0) {
-                ray.x += rayCos;
-                ray.y += raySin;
-                wall = this.data.map[Math.floor(ray.y)][Math.floor(ray.x)];
-                this.activeSprites(ray.x, ray.y, sprites);
+
+            while(!this.data.map.unmoveble.includes(wall)) {
+                ray.x += ray_cos;
+                ray.y += ray_sin;
+                wall = this.data.map.layout[Math.floor(ray.y)][Math.floor(ray.x)];
             }
 
             let distance = Math.sqrt(Math.pow(player.x - ray.x, 2) + Math.pow(player.y - ray.y, 2));
 
-            distance = distance * Math.cos(LocalMath.degreeToRadians(rayAngle - player.angle));
+            distance = distance * Math.cos(LocalMath.degreeToRadians(ray_angle - player.angle));
 
             let wallHeight = Math.floor(this.data.projection.halfHeight / distance);
 
@@ -322,12 +587,30 @@ export default class Render{
 
             let texturePositionX = Math.floor((texture.width * (ray.x + ray.y)) % texture.width);
 
-            this.drawBackground(rayCount, 0, this.data.projection.halfHeight - wallHeight, this.data.backgrounds[0], player);
-            this.drawTexture(rayCount, wallHeight, texturePositionX, texture, distance);
-            this.drawFloor(rayCount, wallHeight, rayAngle, player)
+            this.drawBackground(rayCount, 0, this.data.projection.height, this.data.backgrounds[0], player);
+            this.drawTexture(rayCount, wallHeight, texturePositionX, texture, distance, player);
+            this.drawFloor(rayCount, wallHeight, ray_angle, player)
             this.buffer.push(distance)
+            if(ray_angle > player.angle - player.halfFov && ray_angle <  player.angle + player.halfFov){
+                sprites.forEach(s => {
+                    if (!s.active && !s.marked) {
+                        let x1 = player.x, y1 = player.y, x2 = ray.x, y2 = ray.y, x3 = s.x, y3 = s.y;
 
-            rayAngle += this.data.rayCasting.incrementAngle;
+                        let double_x = (x1 * x1 * x3 - 2 * x1 * x2 * x3 + x2 * x2 * x3 + x2 *
+                            (y1 - y2) * (y1 - y3) - x1 * (y1 - y2) * (y2 - y3)) / ((x1 - x2) *
+                            (x1 - x2) + (y1 - y2) * (y1 - y2));
+                        let double_y = (x2 * x2 * y1 + x1 * x1 * y2 + x2 * x3 * (y2 - y1) - x1 *
+                            (x3 * (y2 - y1) + x2 * (y1 + y2)) + (y1 - y2) * (y1 - y2) * y3) / ((
+                            x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+                        let d = Math.sqrt(Math.pow(s.x - double_x, 2) + Math.pow(s.y - double_y, 2));
+                        if(d < 0.15 && Math.sqrt(Math.pow(player.x - double_x, 2) + Math.pow(player.y - double_y, 2)) < distance){
+                            s.active = true
+                            s.marked = true
+                        }
+                    }
+                })
+            }
+            ray_angle += this.data.rayCasting.incrementAngle;
         }
     }
 
@@ -338,115 +621,24 @@ export default class Render{
         this.screenContext.clearRect(0, 0, this.data.projection.width, this.data.projection.height);
     }
 
-    activeSprites(x, y, sprites) {
-        for(let i = 0; i < sprites.length; i++) {
-            if(Math.floor(sprites[i].x) == Math.floor(x) && Math.floor(sprites[i].y) == Math.floor(y)) {
-                sprites[i].active = true;
-            }
-        }
-    }
+    drawSprites(game) {
+        let to_draw = []
 
-    drawSprites(player, sprites) {
-        for(let i = 0; i < sprites.length; i++) {
-            if(sprites[i].active) {
-                sprites[i].draw(player, this.screenContext, this.buffer, this.data.projection)
-            }
-        }
-    }
-    drawSprite(xProjection, spriteWidth, spriteHeight, sprite, item, spriteAngleRadians, distance) {
-        let start_draw = Math.round(xProjection - spriteWidth / 2)
-        let s_w = sprite.width
-        let s_w_offset = 0
-        let s_w_o = 0
-        if((this.buffer[start_draw] < distance && this.buffer[start_draw + spriteWidth - 1] < distance)){
-            return;
-        }
-        else if(this.buffer[start_draw] < distance){
-            for(let i = start_draw; i < start_draw + spriteWidth; i++){
-                if(this.buffer[i] > distance){
-                    s_w_offset = s_w * ( (i - start_draw) / spriteWidth)
-                    s_w_o = (i - start_draw)
-                    s_w *= ( spriteWidth - (i - start_draw) )/ spriteWidth
-                    spriteWidth -= (i - start_draw)
-                    break
-                }
-            }
-        }
-        else if(this.buffer[start_draw + spriteWidth - 1] < distance){
-            for(let i = start_draw; i < start_draw + spriteWidth; i++){
-                if(this.buffer[i] < distance){
-                    s_w *= (i - start_draw) / spriteWidth
-                    spriteWidth -= spriteWidth - (i - start_draw)
-                    break
-                }
+        for(let i = 0; i < game.sprites.length; i++) {
+            game.sprites[i]?.act(game)
+            if(game.sprites[i] && game.sprites[i].active){
+                to_draw.push(game.sprites[i])
             }
         }
 
-        let offset = 0
-        spriteAngleRadians = (spriteAngleRadians + 360) % 360
+        to_draw.sort((a, b) => {
+            return Math.sqrt(Math.pow(game.player.x - b.x, 2) + Math.pow(game.player.y - b.y, 2)) -
+                   Math.sqrt(Math.pow(game.player.x - a.x, 2) + Math.pow(game.player.y - a.y, 2))
+        })
 
-        if(item.state != item.previos_state){
-            item.frame = 0
-            item.frame_timer = 0
+        for(let i = 0; i < to_draw.length; i++) {
+            to_draw[i].draw(game.player, this.screenContext, this.buffer, this.data.projection)
         }
-        else {
-            if(item.state == 1){
-                item.frame = 0
-            }
-            else {
-                item.frame_timer ++
-                if(item.frame_timer > 40){
-                    item.frame_timer = 0
-                    item.frame ++
-                    if(item.frame > 5){
-                        item.frame = 0
-                    }
-                }
-            }
-        }
-
-        if(spriteAngleRadians){
-            let angle_dif = spriteAngleRadians - item.angle
-            angle_dif = (angle_dif + 360) % 360
-            if(angle_dif < 157.5 && angle_dif > 112.5){
-                offset = 7
-            }
-            else if(angle_dif < 112.5 && angle_dif > 67.5){
-                offset = 6
-            }
-            else if(angle_dif < 67.5 && angle_dif > 22.5){
-                offset = 5
-            }
-            else if(angle_dif > 202.5 && angle_dif < 247.5){
-                offset = 1
-            }
-            else if(angle_dif > 247.5 && angle_dif < 292.5){
-                offset = 2
-            }
-            else if(angle_dif > 292.5 && angle_dif <  337.5){
-                offset = 3
-            }
-            else if((angle_dif > 337.5 && angle_dif < 360) || (angle_dif > 0 && angle_dif < 22.5)){
-                offset = 4
-            }
-
-        }
-        if(!item.simple){
-            this.screenContext.fillText(item.nick + '(' + item.hp + ')', xProjection - 10, this.data.projection.halfHeight - spriteHeight / 2)
-            this.screenContext.font = "12px serif";
-            this.screenContext.fillStyle = 'white'
-        }
-
-       this.screenContext.drawImage(sprite.img,
-            sprite.width  * offset + s_w_offset,
-            sprite.height * item.frame,
-            s_w,
-            sprite.height,
-            start_draw + s_w_o,
-            this.data.projection.halfHeight - spriteHeight / 2,
-            spriteWidth,
-            spriteHeight
-        )
     }
 
     drawBackground(x, y1, y2, background, player) {
@@ -458,18 +650,74 @@ export default class Render{
             this.drawPixel(x, y, color);
         }
     }
-   drawTexture(x, wallHeight, texturePositionX, texture, distance) {
+   drawTexture(x, wallHeight, texturePositionX, texture, distance, player) {
         let yIncrementer = (wallHeight * 2) / texture.height;
         let y = this.data.projection.halfHeight - wallHeight;
         let color = null
         for(let i = 0; i < texture.height; i++) {
-            if(texture.id) {
-                color = texture.data[texturePositionX + i * texture.width];
-            } else {
-                color = texture.colors[texture.bitmap[i][texturePositionX]];
-            }
-            this.drawLine(x, y, Math.floor(y + yIncrementer + 2), color, distance);
+            color = texture.data[texturePositionX + i * texture.width];
+            this.drawLine(x, y, Math.floor(y + yIncrementer + 2), color, distance, player);
             y += yIncrementer;
         }
+    }
+
+    updateMiniMap(player){
+        let minimap = document.getElementById('minimap-content')
+        minimap.innerHTML = ''
+
+        this.data.map.layout.forEach((row, row_index) => {
+            let map_row = document.createElement('div')
+            map_row.className = 'minimap-row'
+            row.forEach((cell, cell_index) =>{
+                let row_cell = document.createElement('div')
+                row_cell.className = 'minimap-cell'
+                let is_player = Math.floor(player.x) === cell_index && Math.floor(player.y) === row_index
+                if(is_player){
+                    row_cell.style.backgroundColor = 'yellow'
+                }
+                else if(this.data.map.power_up_spots.some(pu => pu[0] === cell_index && pu[1] === row_index)){
+                    row_cell.style.backgroundColor = 'green'
+                }
+                else if(!cell){
+                    row_cell.style.backgroundColor = 'black'
+                }
+                else {
+                    row_cell.style.backgroundColor = 'white'
+                }
+                map_row.appendChild(row_cell)
+            })
+
+            minimap.appendChild(map_row)
+        })
+    }
+
+    drawMiniMap(map){
+        this.data.map = map
+        this.data.map.power_up_spots = map.power_up_spots.map(elem => [Math.floor(elem.x), Math.floor(elem.y)])
+        let minimap_name = document.getElementById('minimap-name')
+        minimap_name.innerText = map.name
+        let minimap = document.getElementById('minimap-content')
+
+        map.layout.forEach((row, row_index) => {
+            let map_row = document.createElement('div')
+            map_row.className = 'minimap-row'
+            row.forEach((cell, cell_index) =>{
+                let row_cell = document.createElement('div')
+                row_cell.className = 'minimap-cell'
+                let is_pu = this.data.map.power_up_spots.some(pu => pu[0] === cell_index && pu[1] === row_index)
+                if(is_pu){
+                    row_cell.style.backgroundColor = 'green'
+                }
+                else if(!cell){
+                    row_cell.style.backgroundColor = 'black'
+                }
+                else {
+                    row_cell.style.backgroundColor = 'white'
+                }
+                map_row.appendChild(row_cell)
+            })
+
+            minimap.appendChild(map_row)
+        })
     }
 }

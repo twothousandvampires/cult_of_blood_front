@@ -28,7 +28,6 @@ export default class SimpleObject extends GameObject{
         let sprite_height = sprite_width
 
         let start_draw = Math.round(sprite_x - sprite_width / 2)
-        let wall_height = Math.floor(this.data.projection.halfHeight / distance)
 
         ctx.globalAlpha = this.getAplha(distance, player)
         ctx.drawImage(this.sprite.img,

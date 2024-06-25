@@ -120,21 +120,29 @@ export default class Render{
                     src: './sprites/skeleton/skeleton_idle.png',
                     width: 220,
                     height: 300,
+                    game_width: 150,
+                    game_height: 220,
                 },
                 {
                     src: './sprites/skeleton/skeleton_walk.png',
                     width: 220,
                     height: 300,
+                    game_width: 150,
+                    game_height: 220,
                 },
                 {
                     src: './sprites/skeleton/skeleton_attack.png',
                     width: 220,
                     height: 300,
+                    game_width: 150,
+                    game_height: 220,
                 },
                 {
                     src: './sprites/skeleton/skeleton_dead.png',
                     width: 220,
                     height: 300,
+                    game_width: 150,
+                    game_height: 220,
                 }
             ],
         },
@@ -353,6 +361,7 @@ export default class Render{
         }
     }
     drawFrame(game) {
+        let s = Date.now()
         if(!this.data.map) return
         this.clearScreen();
         this.rayCasting(game.player, game.sprites);
@@ -360,6 +369,7 @@ export default class Render{
         this.drawSprites(game);
         this.drawHud(game.player)
         this.updateHud(game.player)
+        console.log(Date.now() - s)
     }
     updateHud(player){
         if(!player.angle) return

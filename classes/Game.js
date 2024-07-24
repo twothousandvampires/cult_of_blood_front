@@ -7,6 +7,7 @@ import BackEndPlayer from "./game_object/Player.js";
 import Player from "./Player.js";
 import PowerUp from "./game_object/PowerUp.js";
 import SpellSpriteCreator from "./creators/SpellSpriteCreator.js";
+import MapSprite from "./game_object/MapSprite.js";
 
 export default class Game{
     constructor() {
@@ -46,6 +47,15 @@ export default class Game{
                         game.style.display = 'flex'
 
                         await document.body.requestPointerLock();
+
+                        // let a = document.getElementById('main-audio')
+                        //
+                        // a.pause()
+                        // a.currentTime = 0;
+                        //
+                        // let a2 = document.getElementById('game-audio')
+                        // a2.volume = 0.3
+                        // a2.play()
 
                         this.startLoop()
                     }
@@ -127,6 +137,9 @@ export default class Game{
         })
         socket.on('update_map', (map) => {
             this.render.drawMiniMap(map)
+            map.sprites.forEach(elem => {
+                this.sprites.push(new MapSprite(elem.x, elem.y, Math.random(), elem.name))
+            })
         })
         socket.on('update_power_ups', (data) => {
             data.forEach(elem => {
@@ -187,9 +200,9 @@ export default class Game{
     createDeadModal(){
         let div = document.getElementById('dead_modal')
         div.style.display = 'flex'
-        let sec = 5
+        let sec = 3
         let int = setInterval(()=>{
-            if(sec < 0){
+            if(sec <= 0){
                 document.getElementById('go_next').innerText = 'GO!'
                 let listener = function (event){
                     if(event.keyCode === 13){

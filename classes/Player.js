@@ -27,7 +27,6 @@ export default class Player{
     getGameMode(){
         return this.game_mode.getMode()
     }
-
     setWeaponMode(weapon_type){
         if(!weapon_type) return
 
@@ -41,7 +40,7 @@ export default class Player{
     }
     setCastMode(spell){
         if(!spell) return
-
+        console.log(spell)
         if(spell.channeling){
             this.game_mode = new CastModeChanneling(this)
         }else {
@@ -140,6 +139,15 @@ export default class Player{
     newSpell(spell){
         this.spell = spell
         this.spell.is_cd = false
+        this.is_special = false
+        this.casted = false
+
+        if(this.game_mode instanceof WeaponModeSword){
+
+        }
+        else {
+            this.setCastMode(spell)
+        }
     }
 
     update(back_end_player){

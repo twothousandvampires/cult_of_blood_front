@@ -7,7 +7,7 @@ export default class SwordHudSprite{
         this.y_offset = 0
         this.max_frame = 0
         this.img = new Image()
-        this.img.src = 'hud2.png'
+        this.img.src = '222666.png'
     }
     isFrameHit(){
         return this.frame === 5

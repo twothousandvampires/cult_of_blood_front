@@ -35,7 +35,8 @@ export default class Game{
                 div.style.display = 'flex'
                 div.addEventListener('keypress', async (e) => {
                     if (e.key === 'Enter') {
-                        socket.emit('init', document.getElementById('nick').value,  document.getElementById('skin').value)
+                        socket.emit('init', document.getElementById('nick').value,  document.getElementById('skin').value,
+                            document.getElementById('weapon').value )
                         div.style.display = 'none'
 
                         let pre = document.getElementById('pre-game');

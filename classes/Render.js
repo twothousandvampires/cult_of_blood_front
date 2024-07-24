@@ -369,7 +369,7 @@ export default class Render{
         this.drawSprites(game);
         this.drawHud(game.player)
         this.updateHud(game.player)
-        console.log(Date.now() - s)
+        // console.log(Date.now() - s)
     }
     updateHud(player){
         if(!player.angle) return
@@ -380,9 +380,11 @@ export default class Render{
         this.hud_stat_power.innerText = player.power
     }
     drawHud(player){
+
         if(!player.game_mode) return
 
         let sprite = player.game_mode.hud
+
         this.screenContext.drawImage(sprite.img,
             300 * sprite.frame,
             sprite.y_offset,

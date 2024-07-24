@@ -1,4 +1,4 @@
-export default class SwordHudSprite{
+export default class SwordHudStaff{
     constructor(player) {
         this.player = player
         this.frame_timer = 0
@@ -7,10 +7,10 @@ export default class SwordHudSprite{
         this.y_offset = 0
         this.max_frame = 0
         this.img = new Image()
-        this.img.src = 'hud2.png'
+        this.img.src = 'hud_staff.png'
     }
     isFrameHit(){
-        return this.frame === 5
+        return this.frame === 6
     }
     isAnimationEnd(){
         return this.is_loop_end

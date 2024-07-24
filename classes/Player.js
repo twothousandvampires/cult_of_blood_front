@@ -1,6 +1,7 @@
 import socket from "../socket.js";
 import CastModeDefault from "./State/CastModeDefault.js";
 import WeaponModeSword from "./State/WeaponModeSword.js";
+import WeaponModeStaff from "./State/WeaponModeStaff.js";
 import WeaponMode from "./State/WeaponMode.js";
 import CastModeChanneling from "./State/CastModeChanneling.js";
 export default class Player{
@@ -30,8 +31,12 @@ export default class Player{
     setWeaponMode(weapon_type){
         if(!weapon_type) return
 
-        if(weapon_type === WeaponMode.WEAPON_SWORD){
+        if(weapon_type == WeaponMode.WEAPON_SWORD){
+            alert(weapon_type)
             this.game_mode = new WeaponModeSword(this)
+        }
+        else if(weapon_type == WeaponMode.WEAPON_STAFF){
+            this.game_mode = new WeaponModeStaff(this)
         }
     }
     setCastMode(spell){

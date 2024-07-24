@@ -131,6 +131,10 @@
                 <input placeholder="nickname" autocomplete="off" id="nick" type="text">
             </div>
             <div style="display: flex;flex-direction: column;align-items: center;justify-content: center">
+                <select name="weapon" id="weapon">
+                    <option value="1" selected>sword</option>
+                    <option value="2" >staff</option>
+                </select>
                 <select id="skin">
                     <option data-img="/sprite_preview/titan.png" value="titan">titan</option>
                     <option data-img="/sprite_preview/skeleton.png" value="skeleton">skeleton</option>
@@ -144,7 +148,6 @@
                         o.forEach(elem => {
                             if(elem.selected){
                                 let img = document.getElementById('preview-img')
-                                console.log(img)
                                 img.src = elem.dataset.img
                             }
                         })

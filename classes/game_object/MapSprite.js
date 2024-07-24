@@ -1,12 +1,13 @@
 import GameObject from "./GameObject.js";
-import LocalMath from "../LocalMath.js";
 import Render from "../Render.js";
+import LocalMath from "../LocalMath.js";
 
-export default class SimpleObject extends GameObject{
-    constructor(x, y, id, texture_id, angle = undefined) {
+export default class MapSprite extends GameObject{
+    constructor(x, y, id, texture_id) {
         super(x, y, id);
         this.sprite = Render.getSpriteById(texture_id).state_sprite_data[0]
-        this.angle = angle
+        this.box_x = this.sprite.box_x
+        this.box_y = this.sprite.box_y
     }
 
     draw(player, ctx, buffer, projection) {
@@ -22,12 +23,15 @@ export default class SimpleObject extends GameObject{
         if (sprite_angle > 360) sprite_angle -= 360;
         if (sprite_angle < 0) sprite_angle += 360;
 
-        let sprite_x = Math.floor(sprite_angle * projection.width / player.fov);
+        let start_draw_x = Math.floor(sprite_angle * projection.width / player.fov);
+
+        let wall_height = Math.floor(projection.halfHeight / distance);
 
         let sprite_width = Math.floor(this.box_x / distance);
+
         let sprite_height = this.box_y ? Math.floor(this.box_y / distance) : sprite_width
 
-        let start_draw = Math.round(sprite_x - sprite_width / 2)
+        let start_draw_y= projection.halfHeight + wall_height - sprite_height
 
         ctx.globalAlpha = this.getAplha(distance, player)
         ctx.drawImage(this.sprite.img,
@@ -35,8 +39,8 @@ export default class SimpleObject extends GameObject{
             0,
             this.sprite.width,
             this.sprite.height,
-            start_draw,
-            projection.halfHeight - sprite_height / 2,
+            start_draw_x,
+            start_draw_y,
             sprite_width,
             sprite_height
         )

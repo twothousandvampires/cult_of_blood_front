@@ -30,6 +30,11 @@ export default class CastModeChanneling extends CastMode{
         this.hud.setSpecial()
     }
 
+    reset(){
+        this.was_interapted = false
+        this.alredy_channel = false
+    }
+
     specialAct(inputs){
         if(!inputs.is(Input.MOUSE_2) && !this.was_interapted){
             this.was_interapted = true

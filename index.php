@@ -120,7 +120,8 @@
         </div>
     </div>
     <div id="pre-game">
-        <audio id="main-audio" src="/main.mp3"></audio>
+        <audio id="main-audio" src="./main.mp3"></audio>
+        <audio id="game-audio" src="./game.mp3"></audio>
         <div id="start-btn-wrap">
             <img style="visibility: hidden" src="skull.gif">
             <p id="start-btn">start</p>
@@ -132,11 +133,11 @@
             </div>
             <div style="display: flex;flex-direction: column;align-items: center;justify-content: center">
                 <select id="skin">
-                    <option data-img="/sprite_preview/titan.png" value="titan">titan</option>
-                    <option data-img="/sprite_preview/skeleton.png" value="skeleton">skeleton</option>
-                    <option data-img="/sprite_preview/druid.png" value="druid">druid</option>
+                    <option data-img="./sprite_preview/titan.png" value="titan">titan</option>
+                    <option data-img="./sprite_preview/skeleton.png" value="skeleton">skeleton</option>
+                    <option data-img="./sprite_preview/druid.png" value="druid">druid</option>
                 </select>
-                <img id="preview-img" width="140px" height="200px" src="/sprite_preview/titan.png">
+                <img id="preview-img" width="140px" height="200px" src="./sprite_preview/titan.png">
                 <script>
                     let select = document.getElementById('skin')
                     select.addEventListener('change', (e)=> {
@@ -144,7 +145,6 @@
                         o.forEach(elem => {
                             if(elem.selected){
                                 let img = document.getElementById('preview-img')
-                                console.log(img)
                                 img.src = elem.dataset.img
                             }
                         })
@@ -156,10 +156,6 @@
     </div>
 </body>
 <script>
-    window.addEventListener('mousemove', ()=>{
-        // let a = document.getElementById('main-audio')
-        // a.play()
-    })
     window.onload = function() {
         let start_btn = document.getElementById('start-btn-wrap')
         start_btn.style.display = 'flex'
@@ -180,7 +176,7 @@
         })
     })
 </script>
-<script type="module" src="main.js"></script>
+<script type="module" src="./main.js"></script>
 </html>
 <style>
     #game{
@@ -214,7 +210,7 @@
         font-size: 50px;
     }
     #pre-game{
-        background-image: url('/main.png');
+        background-image: url('./main.png');
         width: 100%;
         height: 100%;
         background-size: cover;

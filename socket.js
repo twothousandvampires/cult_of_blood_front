@@ -1,4 +1,4 @@
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
-const socket = io.connect('http://178.19.246.11:9001');
+const socket = io.connect('http://89.111.155.67:3000');
 
 export default socket

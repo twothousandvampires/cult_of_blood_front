@@ -256,13 +256,28 @@ export default class Render{
                 }
             ],
         },
-        // {
-        //     id: 'bat',
-        //     width: 150,
-        //     height: 226,
-        //     data: null,
-        //     src: 'bat.png'
-        // }
+        'statue' : {
+            state_sprite_data: [
+                {
+                    width: 123,
+                    height: 329,
+                    src: './sprites/map_sprites/statue.png',
+                    box_x: 105,
+                    box_y: 280
+                }
+            ]
+        },
+        'tombstone' : {
+            state_sprite_data: [
+                {
+                    width: 171,
+                    height: 466,
+                    src: './sprites/map_sprites/tombstone.png',
+                    box_x: 30,
+                    box_y: 80
+                }
+            ]
+        }
     }
 
     static getSpriteById(texture_id){
@@ -326,7 +341,6 @@ export default class Render{
             ],
         }
 
-        this.sprites = []
         this.buffer = []
         this.delay = 15
     }
@@ -361,7 +375,6 @@ export default class Render{
         }
     }
     drawFrame(game) {
-        let s = Date.now()
         if(!this.data.map) return
         this.clearScreen();
         this.rayCasting(game.player, game.sprites);
@@ -369,7 +382,6 @@ export default class Render{
         this.drawSprites(game);
         this.drawHud(game.player)
         this.updateHud(game.player)
-        console.log(Date.now() - s)
     }
     updateHud(player){
         if(!player.angle) return
@@ -543,8 +555,9 @@ export default class Render{
             tiley += player.y
             let tile = this.data.map.layout[Math.floor(tiley)][Math.floor(tilex)]
 
+            // todo texture under sprite
             // Get texture
-            let texture = this.data.floorTextures[tile]
+            let texture = this.data.floorTextures[0]
 
             if(!texture) {
                 continue
@@ -581,7 +594,7 @@ export default class Render{
 
             let wall = 0;
 
-            while(!this.data.map.unmoveble.includes(wall)) {
+            while(!this.data.map.uncasting.includes(wall)) {
                 ray.x += ray_cos;
                 ray.y += ray_sin;
                 wall = this.data.map.layout[Math.floor(ray.y)][Math.floor(ray.x)];
@@ -595,10 +608,14 @@ export default class Render{
 
             let texture = this.data.textures[wall - 1];
 
-            let texturePositionX = Math.floor((texture.width * (ray.x + ray.y)) % texture.width);
+
 
             this.drawBackground(rayCount, 0, this.data.projection.height, this.data.backgrounds[0], player);
-            this.drawTexture(rayCount, wallHeight, texturePositionX, texture, distance, player);
+            if(texture){
+                let texturePositionX = Math.floor((texture.width * (ray.x + ray.y)) % texture.width);
+                this.drawTexture(rayCount, wallHeight, texturePositionX, texture, distance, player);
+            }
+
             this.drawFloor(rayCount, wallHeight, ray_angle, player)
             this.buffer.push(distance)
             if(ray_angle > player.angle - player.halfFov && ray_angle <  player.angle + player.halfFov){

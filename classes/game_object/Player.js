@@ -152,8 +152,6 @@ export default class Player extends GameObject{
         }
 
         ctx.globalAlpha = this.getAplha(distance, player)
-        console.log('sh' + sprite_height)
-        console.log('ih' + sprite_height)
         ctx.drawImage(img.img,
             img.width  * offset + s_w_offset,
             img.height * frame,

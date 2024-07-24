@@ -12,6 +12,9 @@ export default class CastMode{
         this.player.is_special = false
     }
 
+    reset(){
+
+    }
     act(inputs){
         this.hud.act()
 

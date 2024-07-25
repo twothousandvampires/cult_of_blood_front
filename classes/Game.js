@@ -180,6 +180,7 @@ export default class Game{
                         exist.state = back_end_player.state
                         exist.is_attack = back_end_player.is_attack
                         exist.in_block = back_end_player.in_block
+                        exist.is_invisible = back_end_player.is_invisible
                     }
                     else {
                         let new_player_sprite = new BackEndPlayer(server_data[item].x,
@@ -191,6 +192,7 @@ export default class Game{
                             server_data[item].texture_id,
                             server_data[item].state
                             )
+                        new_player_sprite.is_invisible = server_data[item].is_invisible
                         this.sprites.push(new_player_sprite)
                     }
                 }

@@ -17,6 +17,8 @@ export default class Player extends GameObject{
     }
 
     draw(player, ctx, buffer, projection){
+        if(this.is_invisible) return
+
         let distance = Math.sqrt(Math.pow(player.x - this.x, 2) + Math.pow(player.y - this.y, 2));
         if(distance > player.max_distance) return
 

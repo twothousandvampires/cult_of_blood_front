@@ -31,7 +31,7 @@ export default class MapSprite extends GameObject{
 
         let sprite_height = this.box_y ? Math.floor(this.box_y / distance) : sprite_width
 
-        let start_draw_y= projection.halfHeight + wall_height - sprite_height
+        let start_draw_y = projection.halfHeight + wall_height - sprite_height
 
         ctx.globalAlpha = this.getAplha(distance, player)
         ctx.drawImage(this.sprite.img,

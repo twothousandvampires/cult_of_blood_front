@@ -10,7 +10,7 @@ export default class SwordHudStaff{
         this.img.src = 'hud_staff.png'
     }
     isFrameHit(){
-        return this.frame === 6
+        return this.frame === 5
     }
     isAnimationEnd(){
         return this.is_loop_end
@@ -23,12 +23,21 @@ export default class SwordHudStaff{
 
     setSpecial(){
         this.y_offset = 200
-        this.max_frame = 0
+        this.max_frame = 5
     }
 
     setIdle(){
         this.y_offset = 0
         this.max_frame = 0
+        this.min_frame = 0
+    }
+
+    stopFrame(){
+        this.min_frame = 1
+    }
+
+    isCastFrame(){
+        return this.frame === 5
     }
 
     act(){
@@ -41,7 +50,13 @@ export default class SwordHudStaff{
 
             if(this.frame > this.max_frame){
                 this.is_loop_end = true
-                this.frame = 0
+                if(this.min_frame){
+                    this.frame = this.min_frame
+                }
+                else {
+                    this.frame = 0
+                }
+
                 this.frame_timer = 0
             }
         }

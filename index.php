@@ -140,6 +140,7 @@
                     <option data-img="./sprite_preview/titan.png" value="titan">titan</option>
                     <option data-img="./sprite_preview/skeleton.png" value="skeleton">skeleton</option>
                     <option data-img="./sprite_preview/druid.png" value="druid">druid</option>
+                    <option data-img="./sprite_preview/sun_follower.gif" value="sun_follower">sun follower</option>
                 </select>
                 <img id="preview-img" width="140px" height="200px" src="./sprite_preview/titan.png">
                 <script>

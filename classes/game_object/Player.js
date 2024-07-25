@@ -33,9 +33,10 @@ export default class Player extends GameObject{
 
         let sprite_x = Math.floor(sprite_angle * projection.width / player.fov);
 
-        let sprite_width = Math.floor(img.width / distance);
-        let sprite_height = Math.floor(projection.height / distance);
+        let sprite_width = Math.floor(img.game_width / distance);
+        let sprite_height = Math.floor(img.game_height / distance);
 
+        let wall_height = Math.floor(projection.halfHeight / distance);
         this.in_attack = projection.middle > sprite_x - sprite_width / 2 && projection.middle < sprite_x + sprite_width / 2
 
         let start_draw = Math.round(sprite_x - sprite_height / 2)
@@ -117,7 +118,7 @@ export default class Player extends GameObject{
                     if(this.frame_timer > 7){
                         this.frame_timer = 0
                         this.frame ++
-                        if(this.frame > 5){
+                        if(this.frame > this.sprite.sprite_data.max_frame){
                             this.frame = 0
                         }
                     }
@@ -128,12 +129,12 @@ export default class Player extends GameObject{
                 if(this.frame_timer > 7){
                     this.frame_timer = 0
                     this.frame ++
-                    if(this.frame > 5){
+                    if(this.frame > this.sprite.sprite_data.max_frame){
                         if(this.state != 4){
                             this.frame = 0
                         }
                         else {
-                            this.frame = 5
+                            this.frame = this.sprite.sprite_data.max_frame
                         }
                     }
 
@@ -158,7 +159,7 @@ export default class Player extends GameObject{
             s_w,
             img.height,
             start_draw + s_w_o,
-            projection.halfHeight - sprite_height /2,
+            projection.halfHeight + wall_height - sprite_height,
             sprite_width,
             sprite_height
         )

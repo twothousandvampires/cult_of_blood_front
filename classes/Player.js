@@ -52,15 +52,20 @@ export default class Player{
         this.deal_hit = false
     }
     playerHit(){
+        let weapon_distance = this.game_mode?.attack_range
+        if(!weapon_distance) return
+
         this.deal_hit = true
         let game = this.game
+
         for(let i = 0; i < game.sprites.length; i++) {
             let sprite =  game.sprites[i]
             if(sprite === this) continue
             if(!sprite.in_attack) continue
+
             let distance = Math.sqrt(Math.pow(sprite.x - this.x, 2) + Math.pow(sprite.y - this.y, 2))
             let attack_add_distance = this.move_forward ? 0.2 : 0
-            let total_range = 0.8 + attack_add_distance
+            let total_range = weapon_distance + attack_add_distance
             if(distance > total_range) continue
             socket.emit('hit_player', sprite.id)
         }
@@ -142,7 +147,7 @@ export default class Player{
         this.is_special = false
         this.casted = false
 
-        if(this.game_mode instanceof WeaponModeSword){
+        if(this.game_mode instanceof WeaponMode){
 
         }
         else {

@@ -9,6 +9,8 @@ export default class WeaponModeSword extends WeaponMode{
         super()
         this.player = player
         this.hud = new SwordHudSprite(this.player)
+        this.attack_range = 0.8
+        this.attack_cooldown = 200
     }
 
     special(){
@@ -26,6 +28,9 @@ export default class WeaponModeSword extends WeaponMode{
             if(this.hud.isAnimationEnd()){
                 this.hud.setIdle()
                 this.player.endAttack()
+                setTimeout(()=> {
+                    this.is_attack_cooldown = false
+                }, this.attack_cooldown)
             }
         }
     }
@@ -45,11 +50,5 @@ export default class WeaponModeSword extends WeaponMode{
         else if(this.player.is_special){
             this.specialAct(inputs)
         }
-    }
-    attack(){
-        if(this.player.is_special || this.player.is_attack) return
-
-        this.hud.setAttack()
-        socket.emit('start_attack')
     }
 }

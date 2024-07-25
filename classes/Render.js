@@ -104,6 +104,16 @@ export default class Render{
                 },
             ],
         },
+        'blood_offering_pu': {
+            state_sprite_data: [
+                {
+                    src: './sprites/game/blood_offering.png',
+                    width: 40,
+                    height: 40,
+                    simple: true
+                },
+            ],
+        },
         'arrow': {
             state_sprite_data: [
                 {
@@ -115,60 +125,107 @@ export default class Render{
             ],
         },
         'skeleton': {
+            sprite_data: {
+                max_frame: 5
+            },
             state_sprite_data: [
                 {
                     src: './sprites/skeleton/skeleton_idle.png',
                     width: 220,
                     height: 300,
-                    game_width: 150,
-                    game_height: 220,
+                    game_width: 110,
+                    game_height: 150,
                 },
                 {
                     src: './sprites/skeleton/skeleton_walk.png',
                     width: 220,
                     height: 300,
-                    game_width: 150,
-                    game_height: 220,
+                    game_width: 110,
+                    game_height: 150,
                 },
                 {
                     src: './sprites/skeleton/skeleton_attack.png',
                     width: 220,
                     height: 300,
-                    game_width: 150,
-                    game_height: 220,
+                    game_width: 110,
+                    game_height: 150,
                 },
                 {
                     src: './sprites/skeleton/skeleton_dead.png',
                     width: 220,
                     height: 300,
-                    game_width: 150,
-                    game_height: 220,
+                    game_width: 110,
+                    game_height: 150,
+                }
+            ],
+        },
+        'sun_follower': {
+            sprite_data: {
+                max_frame: 7
+            },
+            state_sprite_data: [
+                {
+                    src: './sprites/sun follower/sun_follower_idle.png',
+                    width: 200,
+                    height: 220,
+                    game_width: 110,
+                    game_height: 150,
+                },
+                {
+                    src: './sprites/sun follower/sun_follower_walk.png',
+                    width: 200,
+                    height: 220,
+                    game_width: 110,
+                    game_height: 150,
+                },
+                {
+                    src: './sprites/sun follower/sun_follower_attack.png',
+                    width: 200,
+                    height: 220,
+                    game_width: 110,
+                    game_height: 150,
+                },
+                {
+                    src: './sprites/sun follower/sun_follower_dead.png',
+                    width: 200,
+                    height: 220,
+                    game_width: 110,
+                    game_height: 150,
                 }
             ],
         },
         'titan': {
+            sprite_data: {
+                max_frame: 5
+            },
             state_sprite_data: [
                 {
                     src: './sprites/titan/titan_idle.png',
                     width: 205,
                     height: 375,
-                    game_width: 150,
-                    game_height: 220,
+                    game_width: 110,
+                    game_height: 150,
                 },
                 {
                     src: './sprites/titan/titan_walk.png',
                     width: 205,
                     height: 375,
+                    game_width: 110,
+                    game_height: 150,
                 },
                 {
                     src: './sprites/titan/titan_attack.png',
                     width: 205,
                     height: 375,
+                    game_width: 110,
+                    game_height: 150,
                 },
                 {
                     src: './sprites/titan/titan_dead.png',
                     width: 205,
                     height: 375,
+                    game_width: 110,
+                    game_height: 150,
                 }
             ],
         },
@@ -233,26 +290,37 @@ export default class Render{
             ],
         },
         'druid':{
+            sprite_data: {
+                max_frame: 5
+            },
             state_sprite_data: [
                 {
                     src: './sprites/druid/druid_idle.png',
                     width: 186,
                     height: 294,
+                    game_width: 110,
+                    game_height: 150,
                 },
                 {
                     src: './sprites/druid/druid_walk.png',
                     width: 186,
                     height: 292,
+                    game_width: 110,
+                    game_height: 150,
                 },
                 {
                     src: './sprites/druid/druid_attack.png',
                     width: 186,
                     height: 294,
+                    game_width: 110,
+                    game_height: 150,
                 },
                 {
                     src: './sprites/druid/druid_dead.png',
                     width: 186,
                     height: 294,
+                    game_width: 110,
+                    game_height: 150,
                 }
             ],
         },

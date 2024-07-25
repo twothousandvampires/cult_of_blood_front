@@ -9,6 +9,9 @@ export default class WeaponModeStaff extends WeaponMode{
         super()
         this.player = player
         this.hud = new StaffHudSprite(this.player)
+        this.attack_range = 1
+        this.attack_cooldown = 1200
+        this.was_interapted = false
     }
 
     special(){
@@ -26,11 +29,22 @@ export default class WeaponModeStaff extends WeaponMode{
             if(this.hud.isAnimationEnd()){
                 this.hud.setIdle()
                 this.player.endAttack()
+                setTimeout(()=> {
+                    this.is_attack_cooldown = false
+                }, this.attack_cooldown)
             }
         }
     }
     specialAct(inputs){
-        if(!inputs.is(Input.MOUSE_2)){
+        if(!inputs.is(Input.MOUSE_2) && !this.was_interapted){
+            this.was_interapted = true
+        }
+        else if(this.hud.isCastFrame() && !this.was_interapted){
+            this.hud.stopFrame()
+            return
+        }
+        if(this.hud.isAnimationEnd()){
+            this.was_interapted = false
             this.is_special = false
             socket.emit('end_special')
             this.hud.setIdle()
@@ -46,10 +60,5 @@ export default class WeaponModeStaff extends WeaponMode{
             this.specialAct(inputs)
         }
     }
-    attack(){
-        if(this.player.is_special || this.player.is_attack) return
 
-        this.hud.setAttack()
-        socket.emit('start_attack')
-    }
 }

@@ -5,7 +5,7 @@ start_btn.addEventListener('click', function (){
     start_btn.remove()
     let a = document.getElementById('main-audio')
     a.volume = 0.1
-    a.play()
+    // a.play()
     const game = new Game()
 
     game.prepare()

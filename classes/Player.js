@@ -2,8 +2,12 @@ import socket from "../socket.js";
 import CastModeDefault from "./State/CastModeDefault.js";
 import WeaponModeSword from "./State/WeaponModeSword.js";
 import WeaponModeStaff from "./State/WeaponModeStaff.js";
+import WeaponModeDagger from "./State/WeaponModeDagger.js";
+import WeaponModeHand from "./State/WeaponModeHand.js"
 import WeaponMode from "./State/WeaponMode.js";
 import CastModeChanneling from "./State/CastModeChanneling.js";
+import TransformMode from "./State/TransformMode.js";
+import BeastMode from "./State/BeastMode.js";
 export default class Player{
     static STATE_DEAD = 4
     constructor(game) {
@@ -27,20 +31,34 @@ export default class Player{
     getGameMode(){
         return this.game_mode.getMode()
     }
+    setBeastMode(){
+        this.game_mode = new BeastMode(this)
+    }
+    setCorpse(v){
+        this.game_mode.hud.corpse = v
+        this.game_mode.hud.setIdle()
+    }
+    setTransformMode(){
+        this.game_mode = new TransformMode(this)
+    }
     setWeaponMode(weapon_type){
         if(!weapon_type) return
 
         if(weapon_type == WeaponMode.WEAPON_SWORD){
-            alert(weapon_type)
             this.game_mode = new WeaponModeSword(this)
         }
         else if(weapon_type == WeaponMode.WEAPON_STAFF){
             this.game_mode = new WeaponModeStaff(this)
         }
+        else if(weapon_type == WeaponMode.WEAPON_DAGGER){
+            this.game_mode = new WeaponModeDagger(this)
+        }
+        else if(weapon_type == WeaponMode.WEAPON_HAND){
+            this.game_mode = new WeaponModeHand(this)
+        }
     }
     setCastMode(spell){
         if(!spell) return
-        console.log(spell)
         if(spell.channeling){
             this.game_mode = new CastModeChanneling(this)
         }else {
@@ -52,22 +70,28 @@ export default class Player{
         this.deal_hit = false
     }
     playerHit(){
-        let weapon_distance = this.game_mode?.attack_range
-        if(!weapon_distance) return
+        if(this.weapon === WeaponMode.WEAPON_HAND){
+            socket.emit('hand_attack')
+            this.deal_hit = true
+        }
+        else {
+            let weapon_distance = this.game_mode?.attack_range
+            if(!weapon_distance) return
 
-        this.deal_hit = true
-        let game = this.game
+            this.deal_hit = true
+            let game = this.game
 
-        for(let i = 0; i < game.sprites.length; i++) {
-            let sprite =  game.sprites[i]
-            if(sprite === this) continue
-            if(!sprite.in_attack) continue
+            for(let i = 0; i < game.sprites.length; i++) {
+                let sprite =  game.sprites[i]
+                if(sprite === this) continue
+                if(!sprite.in_attack) continue
 
-            let distance = Math.sqrt(Math.pow(sprite.x - this.x, 2) + Math.pow(sprite.y - this.y, 2))
-            let attack_add_distance = this.move_forward ? 0.2 : 0
-            let total_range = weapon_distance + attack_add_distance
-            if(distance > total_range) continue
-            socket.emit('hit_player', sprite.id)
+                let distance = Math.sqrt(Math.pow(sprite.x - this.x, 2) + Math.pow(sprite.y - this.y, 2))
+                let attack_add_distance = this.move_forward ? 0.2 : 0
+                let total_range = weapon_distance + attack_add_distance
+                if(distance > total_range) continue
+                socket.emit('hit_player', sprite.id)
+            }
         }
     }
     stateFrame(inputs){
@@ -170,7 +194,10 @@ export default class Player{
         this.power = back_end_player.power
         this.weapon = back_end_player.weapon
         this.is_special = back_end_player.is_special
+        this.is_beast = back_end_player.is_beast
+        this.direction_angle = back_end_player.direction_angle
         this.min_distance = back_end_player.min_distance
         this.max_distance = back_end_player.max_distance
+        this.is_invisible = back_end_player.is_invisible
     }
 }

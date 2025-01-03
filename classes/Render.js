@@ -114,6 +114,16 @@ export default class Render{
                 },
             ],
         },
+        'bless_pu': {
+            state_sprite_data: [
+                {
+                    src: './sprites/game/Spell_Bless.gif',
+                    width: 68,
+                    height: 52,
+                    simple: true
+                },
+            ],
+        },
         'arrow': {
             state_sprite_data: [
                 {
@@ -126,7 +136,9 @@ export default class Render{
         },
         'skeleton': {
             sprite_data: {
-                max_frame: 5
+                max_attack_frame: 5,
+                max_walk_frame: 5,
+                max_dead_frame: 5
             },
             state_sprite_data: [
                 {
@@ -161,7 +173,9 @@ export default class Render{
         },
         'sun_follower': {
             sprite_data: {
-                max_frame: 7
+                max_attack_frame: 7,
+                max_walk_frame: 7,
+                max_dead_frame: 7
             },
             state_sprite_data: [
                 {
@@ -194,9 +208,157 @@ export default class Render{
                 }
             ],
         },
+        'minotaur': {
+            sprite_data: {
+                max_attack_frame: 5,
+                max_walk_frame: 7,
+                max_dead_frame: 5
+            },
+            state_sprite_data: [
+                {
+                    src: './sprites/minotaur/minotaur_idle.png',
+                    width: 200,
+                    height: 260,
+                    game_width: 120,
+                    game_height: 180,
+                },
+                {
+                    src: './sprites/minotaur/minotaur_walk.png',
+                    width: 200,
+                    height: 260,
+                    game_width: 120,
+                    game_height: 180,
+                },
+                {
+                    src: './sprites/minotaur/minotaur_attack.png',
+                    width: 200,
+                    height: 260,
+                    game_width: 120,
+                    game_height: 180,
+                },
+                {
+                    src: './sprites/minotaur/minotaur_dead.png',
+                    width: 200,
+                    height: 260,
+                    game_width: 120,
+                    game_height: 180,
+                }
+            ],
+        },
+        'crystal_walker': {
+            sprite_data: {
+                max_attack_frame: 6,
+                max_walk_frame: 7,
+                max_dead_frame: 5
+            },
+            state_sprite_data: [
+                {
+                    src: './sprites/crystal_walker/crystal_walker_idle.png',
+                    width: 200,
+                    height: 220,
+                    game_width: 120,
+                    game_height: 170,
+                },
+                {
+                    src: './sprites/crystal_walker/crystal_walker_walk.png',
+                    width: 200,
+                    height: 220,
+                    game_width: 120,
+                    game_height: 170,
+                },
+                {
+                    src: './sprites/crystal_walker/crystal_walker_attack.png',
+                    width: 200,
+                    height: 220,
+                    game_width: 120,
+                    game_height: 170,
+                },
+                {
+                    src: './sprites/crystal_walker/crystal_walker_dead.png',
+                    width: 170,
+                    height: 220,
+                    game_width: 120,
+                    game_height: 170,
+                }
+            ],
+        },
+        'garage_dwarf': {
+            sprite_data: {
+                max_attack_frame: 7,
+                max_walk_frame: 7,
+                max_dead_frame: 4
+            },
+            state_sprite_data: [
+                {
+                    src: './sprites/garage_dwarf/garage_dwarf_idle.png',
+                    width: 200,
+                    height: 220,
+                    game_width: 120,
+                    game_height: 170,
+                },
+                {
+                    src: './sprites/garage_dwarf/garage_dwarf_walk.png',
+                    width: 200,
+                    height: 220,
+                    game_width: 120,
+                    game_height: 170,
+                },
+                {
+                    src: './sprites/garage_dwarf/garage_dwarf_attack.png',
+                    width: 200,
+                    height: 220,
+                    game_width: 120,
+                    game_height: 170,
+                },
+                {
+                    src: './sprites/garage_dwarf/garage_dwarf_dead.png',
+                    width: 200,
+                    height: 220,
+                    game_width: 120,
+                    game_height: 170,
+                }
+            ],
+        },
+        'vampire': {
+            sprite_data: {
+                max_frame: 7
+            },
+            state_sprite_data: [
+                {
+                    src: './sprites/vampire/vampire_idle.png',
+                    width: 200,
+                    height: 220,
+                    game_width: 120,
+                    game_height: 170,
+                },
+                {
+                    src: './sprites/vampire/vampire_walk.png',
+                    width: 200,
+                    height: 220,
+                    game_width: 120,
+                    game_height: 170,
+                },
+                {
+                    src: './sprites/vampire/vampire_attack.png',
+                    width: 200,
+                    height: 220,
+                    game_width: 120,
+                    game_height: 170,
+                },
+                {
+                    src: './sprites/vampire/vampire_dead.png',
+                    width: 170,
+                    height: 220,
+                    game_width: 120,
+                    game_height: 170,
+                }
+            ],
+        },
         'titan': {
             sprite_data: {
-                max_frame: 5
+                max_attack_frame: 5,
+                max_walk_frame: 5,
+                max_dead_frame: 5
             },
             state_sprite_data: [
                 {
@@ -259,6 +421,16 @@ export default class Render{
                 },
             ],
         },
+        'necro_skull':{
+            state_sprite_data: [
+                {
+                    src: './sprites/spells/necro_skull.png',
+                    width: 38,
+                    height: 38,
+                    simple: true
+                },
+            ],
+        },
         'big_dark_skull':{
             state_sprite_data: [
                 {
@@ -291,7 +463,9 @@ export default class Render{
         },
         'druid':{
             sprite_data: {
-                max_frame: 5
+                max_attack_frame: 5,
+                max_walk_frame: 5,
+                max_dead_frame: 5
             },
             state_sprite_data: [
                 {
@@ -345,6 +519,28 @@ export default class Render{
                     box_y: 80
                 }
             ]
+        },
+        'bush' : {
+            state_sprite_data: [
+                {
+                    width: 100,
+                    height: 100,
+                    src: './sprites/map_sprites/bush.png',
+                    box_x: 350,
+                    box_y: 350
+                }
+            ]
+        },
+        'portal' : {
+            state_sprite_data: [
+                {
+                    width: 50,
+                    height: 50,
+                    src: './sprites/map_sprites/portal.png',
+                    box_x: 100,
+                    box_y: 100
+                }
+            ]
         }
     }
 
@@ -388,6 +584,12 @@ export default class Render{
                     width: 32,
                     height: 32,
                     id: "texture",
+                    data: null
+                },
+                {
+                    width: 32,
+                    height: 32,
+                    id: "bush",
                     data: null
                 },
             ],
@@ -443,6 +645,7 @@ export default class Render{
         }
     }
     drawFrame(game) {
+        let s = Date.now()
         if(!this.data.map) return
         this.clearScreen();
         this.rayCasting(game.player, game.sprites);
@@ -450,6 +653,7 @@ export default class Render{
         this.drawSprites(game);
         this.drawHud(game.player)
         this.updateHud(game.player)
+        // console.log(Date.now() - s)
     }
     updateHud(player){
         if(!player.angle) return
@@ -464,7 +668,9 @@ export default class Render{
         if(!player.game_mode) return
 
         let sprite = player.game_mode.hud
-
+        if(player.is_invisible){
+            this.screenContext.globalAlpha = 0.5
+        }
         this.screenContext.drawImage(sprite.img,
             300 * sprite.frame,
             sprite.y_offset,
@@ -472,6 +678,10 @@ export default class Render{
             ,0,0,
             this.data.projection.width,
             this.data.projection.height)
+
+        if(player.is_invisible){
+            this.screenContext.globalAlpha = 1
+        }
     }
     loadImageDataAndInitCanvas(player){
         this.initHud()
@@ -650,9 +860,11 @@ export default class Render{
         this.screenContext.drawImage(canvas, 0, 0);
     }
    rayCasting(player, sprites) {
+
         this.buffer = []
         let ray_angle = player.angle - player.halfFov;
         for(let rayCount = 0; rayCount < this.data.projection.width; rayCount++) {
+            let start = Date.now()
 
             let ray = {
                 x: player.x,
@@ -670,6 +882,8 @@ export default class Render{
                 wall = this.data.map.layout[Math.floor(ray.y)][Math.floor(ray.x)];
             }
 
+            let after_getting_wall = Date.now()
+
             let distance = Math.sqrt(Math.pow(player.x - ray.x, 2) + Math.pow(player.y - ray.y, 2));
 
             distance = distance * Math.cos(LocalMath.degreeToRadians(ray_angle - player.angle));
@@ -678,16 +892,19 @@ export default class Render{
 
             let texture = this.data.textures[wall - 1];
 
-
-
             this.drawBackground(rayCount, 0, this.data.projection.height, this.data.backgrounds[0], player);
+
             if(texture){
                 let texturePositionX = Math.floor((texture.width * (ray.x + ray.y)) % texture.width);
                 this.drawTexture(rayCount, wallHeight, texturePositionX, texture, distance, player);
             }
 
+            let after_draw_texture = Date.now()
+
             this.drawFloor(rayCount, wallHeight, ray_angle, player)
+
             this.buffer.push(distance)
+
             if(ray_angle > player.angle - player.halfFov && ray_angle <  player.angle + player.halfFov){
                 sprites.forEach(s => {
                     if (!s.active && !s.marked) {
@@ -707,6 +924,12 @@ export default class Render{
                     }
                 })
             }
+            let end = Date.now()
+
+            // console.log('start - wall ' + (after_getting_wall - start))
+            // console.log('wall - texture ' + (after_draw_texture - after_getting_wall))
+            // console.log('texture - end ' + (end - after_draw_texture))
+
             ray_angle += this.data.rayCasting.incrementAngle;
         }
     }
@@ -748,8 +971,12 @@ export default class Render{
         }
     }
    drawTexture(x, wallHeight, texturePositionX, texture, distance, player) {
+        if(wallHeight > 400){
+            wallHeight = 400
+        }
         let yIncrementer = (wallHeight * 2) / texture.height;
         let y = this.data.projection.halfHeight - wallHeight;
+
         let color = null
         for(let i = 0; i < texture.height; i++) {
             color = texture.data[texturePositionX + i * texture.width];
@@ -771,6 +998,9 @@ export default class Render{
                 let is_player = Math.floor(player.x) === cell_index && Math.floor(player.y) === row_index
                 if(is_player){
                     row_cell.style.backgroundColor = 'yellow'
+                    row_cell.innerHTML = '&#x2191;'
+                    row_cell.className = 'minimap-cell-player'
+                    row_cell.style.rotate = (player.angle + 90) + 'deg'
                 }
                 else if(this.data.map.power_up_spots.some(pu => pu[0] === cell_index && pu[1] === row_index)){
                     row_cell.style.backgroundColor = 'green'

@@ -4,6 +4,7 @@ import RailLightning from "../game_object/spell/RailLightning.js";
 import BigDarkSkull from "../game_object/spell/BigDarkSkull.js";
 import IceShard from "../game_object/spell/IceShard.js";
 import FireBall from "../game_object/spell/FireBall.js";
+import NecroSkull from "../game_object/spell/NecroSkull.js";
 
 export default class SpellSpriteCreator{
     static create(x, y, angle, id, texture_id){
@@ -12,6 +13,8 @@ export default class SpellSpriteCreator{
                 return new LightningBolt(x, y, angle, id, texture_id)
             case 'dark_skull':
                 return new DarkSkull(x, y, angle, id, texture_id)
+            case 'necro_skull':
+                return new NecroSkull(x, y, angle, id, texture_id)
             case 'big_dark_skull':
                 return new BigDarkSkull(x, y, angle, id, texture_id)
             case 'rail_lightning':

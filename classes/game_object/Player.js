@@ -15,7 +15,10 @@ export default class Player extends GameObject{
         this.is_attack = false
         this.sprite = Render.getSpriteById(texture_id)
     }
-
+    setNewTexture(texture_id){
+        this.texture_id = texture_id
+        this.sprite = Render.getSpriteById(texture_id)
+    }
     draw(player, ctx, buffer, projection){
         if(this.is_invisible) return
 
@@ -120,7 +123,7 @@ export default class Player extends GameObject{
                     if(this.frame_timer > 7){
                         this.frame_timer = 0
                         this.frame ++
-                        if(this.frame > this.sprite.sprite_data.max_frame){
+                        if(this.frame > this.sprite.sprite_data.max_attack_frame){
                             this.frame = 0
                         }
                     }
@@ -131,15 +134,17 @@ export default class Player extends GameObject{
                 if(this.frame_timer > 7){
                     this.frame_timer = 0
                     this.frame ++
-                    if(this.frame > this.sprite.sprite_data.max_frame){
-                        if(this.state != 4){
+
+                    if(this.state != 4){
+                        if(this.frame > this.sprite.sprite_data.max_walk_frame){
                             this.frame = 0
                         }
-                        else {
-                            this.frame = this.sprite.sprite_data.max_frame
+                    }
+                    else {
+                        if(this.frame > this.sprite.sprite_data.max_dead_frame){
+                            this.frame = this.sprite.sprite_data.max_dead_frame
                         }
                     }
-
                 }
             }
         }

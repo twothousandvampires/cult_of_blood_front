@@ -6,65 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 </head>
 <body>
-    <?php
-        class Test{
-            public function testF(){
-                return '111';
-            }
-        }
-
-        class User{
-            public function get(Test $test){
-                echo $test->testF();
-            }
-        }
-
-        $u = new User();
-
-        function build($className)
-        {
-            $reflector = new ReflectionClass($className);
-            $constructor = $reflector->getConstructor();
-
-            $instances = [];
-
-            if($constructor){
-                foreach ($constructor->getParameters() as $dependency) {
-                    $instances[] = build($dependency->getClass()->name);
-                }
-            }
-
-
-            return $reflector->newInstanceArgs($instances);
-        }
-
-        function dispatchClassMethodWithDI($class, $method){
-
-            $r_method = new ReflectionMethod($class, $method);
-            $methodParams = $r_method->getParameters();
-            $callParams = [];
-
-            foreach ($methodParams as $parameter) {
-
-                $r_class = $parameter->getClass();
-
-                if ($r_class !== null) {
-                    $instance = build($r_class->name);
-                    $callParams[] = $instance;
-                }
-            }
-
-            $classReflect = build($class);
-
-            $classReflect->{$method}(...$callParams);
-        }
-
-//        dispatchClassMethodWithDI(User::class, 'get');
-
-    ?>
     <div id="img-data" style="display: none">
         <img id="texture" src="texture.png">
         <img id="graveyard-fence" src="graveyard_fence.png">
+        <img id="bush" src="bush.png">
         <img id="background" src="background.png">
         <img id="tree" src="skeleton.png">
         <img id="floor-texture" src="floor.png">
@@ -135,12 +80,17 @@
                 <select name="weapon" id="weapon">
                     <option value="1" selected>sword</option>
                     <option value="2" >staff</option>
+                    <option value="3" >dagger</option>
+                    <option value="4" >hand</option>
                 </select>
                 <select id="skin">
                     <option data-img="./sprite_preview/titan.png" value="titan">titan</option>
                     <option data-img="./sprite_preview/skeleton.png" value="skeleton">skeleton</option>
                     <option data-img="./sprite_preview/druid.png" value="druid">druid</option>
                     <option data-img="./sprite_preview/sun_follower.gif" value="sun_follower">sun follower</option>
+                    <option data-img="./sprite_preview/crystal_walker.gif" value="crystal_walker">crystal walker</option>
+                    <option data-img="./sprite_preview/minotaur.gif" value="minotaur">minotaur</option>
+                    <option data-img="./sprite_preview/garage_dwarf.gif" value="garage_dwarf">garage dwarf</option>
                 </select>
                 <img id="preview-img" width="140px" height="200px" src="./sprite_preview/titan.png">
                 <script>
@@ -316,17 +266,25 @@
      }
      #minimap-wrap{
          position: fixed;
-         width: 200px;
-         height: 140px;
-         top:calc(100% - 150px);
-         left:calc(50% - 100px);
+         width: 300px;
+         height: 200px;
+         top:calc(70% - 150px);
+         left:calc(6% - 100px);
      }
      .minimap-row{
          display: flex;
          flex-direction: row;
      }
      .minimap-cell{
-         width: 10px;
-         height: 10px;
+         width: 15px;
+         height: 15px;
+     }
+     .minimap-cell-player{
+         width: 15px;
+         height: 15px;
+         display: flex;
+         flex-direction: row;
+         align-items: center;
+         justify-content: center;
      }
 </style>

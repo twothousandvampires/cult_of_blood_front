@@ -1,16 +1,19 @@
+import LocalMath from "../LocalMath.js";
 import GameObject from "./GameObject.js";
 import Render from "../Render.js";
-import LocalMath from "../LocalMath.js";
 
-export default class MapSprite extends GameObject{
+export default class PortalSprite extends GameObject{
     constructor(sprite) {
         super(sprite.x, sprite.y, Math.random() + '');
         this.sprite = Render.getSpriteById(sprite.name).state_sprite_data[0]
+        this.is_active = sprite.active
+        this.index = sprite.index
         this.box_x = this.sprite.box_x
         this.box_y = this.sprite.box_y
     }
 
     draw(player, ctx, buffer, projection) {
+
         let distance = Math.sqrt(Math.pow(player.x - this.x, 2) + Math.pow(player.y - this.y, 2));
         if(distance > player.max_distance) return
 
@@ -64,7 +67,7 @@ export default class MapSprite extends GameObject{
         ctx.globalAlpha = this.getAplha(distance, player)
         ctx.drawImage(
             img.img,
-            s_w_offset,
+            s_w_offset + (this.is_active ? 50 : 0),
             0,
             s_w,
             img.height,

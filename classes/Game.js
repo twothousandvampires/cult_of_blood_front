@@ -8,6 +8,7 @@ import Player from "./Player.js";
 import PowerUp from "./game_object/PowerUp.js";
 import SpellSpriteCreator from "./creators/SpellSpriteCreator.js";
 import MapSprite from "./game_object/MapSprite.js";
+import PortalSprite from "./game_object/PortalSprite.js";
 
 export default class Game{
     constructor() {
@@ -65,6 +66,20 @@ export default class Game{
         })
         socket.on("delete_player", (socket_id) => {
             this.sprites = this.sprites.filter(elem => elem.id !== socket_id)
+        })
+        socket.on("set_corpse", () => {
+            this.player.setCorpse(true)
+        })
+        socket.on("delete_corpse", () => {
+            this.player.setCorpse(false)
+        })
+        socket.on("update_portals", (portals) => {
+            portals.forEach(elem => {
+                let p = this.sprites.find(sprite => {
+                    return sprite.index === elem.index
+                })
+                p.is_active = elem.active
+            })
         })
         socket.on('update_leaderboard', (data)=>{
             this.render.updateLeaderBoard(data)
@@ -138,7 +153,10 @@ export default class Game{
         socket.on('update_map', (map) => {
             this.render.drawMiniMap(map)
             map.sprites.forEach(elem => {
-                this.sprites.push(new MapSprite(elem.x, elem.y, Math.random(), elem.name))
+                this.sprites.push(new MapSprite(elem))
+            })
+            map.portals.forEach(elem => {
+                this.sprites.push(new PortalSprite(elem))
             })
         })
         socket.on('update_power_ups', (data) => {
@@ -162,6 +180,18 @@ export default class Game{
         })
         socket.on('set_weapon_mode', (server_data) => {
             this.player.setWeaponMode(server_data)
+        })
+        socket.on('set_transform_mode', (server_data) => {
+            this.player.setTransformMode(server_data)
+        })
+        socket.on('set_beast_mode', (server_data) => {
+            this.player.setBeastMode(server_data)
+        })
+        socket.on('set_texture_id', (player, texture_id) => {
+            let s = this.sprites.find(elem => elem.id == player)
+            if(s){
+                s.setNewTexture(texture_id)
+            }
         })
         socket.on("updatePlayers", (server_data) => {
             for(let item in server_data){
@@ -231,7 +261,7 @@ export default class Game{
 
         setInterval(() => {
             this.render.updateMiniMap(this.player)
-        },1000)
+        },100)
 
         this.sendInputsToServer = setInterval(() => {
             if(this.player.state === Player.STATE_DEAD) return
@@ -262,39 +292,49 @@ export default class Game{
                 }
             }
 
-            let dx = Math.cos(LocalMath.degreeToRadians(this.player.angle))
-            let dy = Math.sin(LocalMath.degreeToRadians(this.player.angle))
+            let dy = 0
+            let dx = 0
 
-            if (this.inputs.is(Input.W_KEY_CODE)) {
+            if(this.player.direction_angle){
+                dx = Math.cos(LocalMath.degreeToRadians(this.player.direction_angle))
+                dy = Math.sin(LocalMath.degreeToRadians(this.player.direction_angle))
                 d.dx += dx
                 d.dy += dy
-                d.move_back = false
-                if(!this.inputs.is(Input.S_KEY_CODE)){
-                    d.move_forward = true
+            }
+            else {
+                dx = Math.cos(LocalMath.degreeToRadians(this.player.angle))
+                dy = Math.sin(LocalMath.degreeToRadians(this.player.angle))
+                if (this.inputs.is(Input.W_KEY_CODE)) {
+                    d.dx += dx
+                    d.dy += dy
+                    d.move_back = false
+                    if(!this.inputs.is(Input.S_KEY_CODE)){
+                        d.move_forward = true
+                    }
+                }
+                if (this.inputs.is(Input.S_KEY_CODE)) {
+                    d.dx -= dx
+                    d.dy -= dy
+                    d.move_forward = false
+                    if(!this.inputs.is(Input.W_KEY_CODE)){
+                        d.move_back = true
+                    }
+                }
+                if (this.inputs.is(Input.A_KEY_CODE)) {
+                    d.dx += Math.cos(LocalMath.degreeToRadians(this.player.angle - 90))
+                    d.dy += Math.sin(LocalMath.degreeToRadians(this.player.angle - 90))
+                }
+                if (this.inputs.is(Input.D_KEY_CODE)) {
+                    d.dx += Math.cos(LocalMath.degreeToRadians(this.player.angle + 90))
+                    d.dy += Math.sin(LocalMath.degreeToRadians(this.player.angle + 90))
                 }
             }
-            if (this.inputs.is(Input.S_KEY_CODE)) {
-                d.dx -= dx
-                d.dy -= dy
-                d.move_forward = false
-                if(!this.inputs.is(Input.W_KEY_CODE)){
-                    d.move_back = true
-                }
-            }
-            if (this.inputs.is(Input.A_KEY_CODE)) {
-                d.dx += Math.cos(LocalMath.degreeToRadians(this.player.angle - 90))
-                d.dy += Math.sin(LocalMath.degreeToRadians(this.player.angle - 90))
-            }
-            if (this.inputs.is(Input.D_KEY_CODE)) {
-                d.dx += Math.cos(LocalMath.degreeToRadians(this.player.angle + 90))
-                d.dy += Math.sin(LocalMath.degreeToRadians(this.player.angle + 90))
-            }
+
             let sign = this.inputs.move_x < 0 ? -1 : 1
             d.da = Math.ceil(Math.abs(this.inputs.move_x/10)) * sign
             d.dx = d.dx * this.player.movement_speed
             d.dy = d.dy * this.player.movement_speed
             this.inputs.move_x = 0
-
 
             let check_x = Math.floor(this.player.x + d.dx + (d.dx < 0 ? -0.3 : 0.3))
             let check_y = Math.floor(this.player.y + d.dy + (d.dy < 0 ? -0.3 : 0.3))

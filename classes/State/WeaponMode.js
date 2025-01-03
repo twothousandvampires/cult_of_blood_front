@@ -6,6 +6,8 @@ export default class WeaponMode{
     }
     static WEAPON_SWORD = 1
     static WEAPON_STAFF = 2
+    static WEAPON_DAGGER = 3
+    static WEAPON_HAND = 4
     static GAME_MODE_WEAPON = 1
 
 
